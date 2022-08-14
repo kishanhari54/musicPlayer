@@ -1,0 +1,153 @@
+:root {
+    --fontsize: 15px;
+    --background: #324459;
+}
+
+body {
+    margin: .3rem;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+    gap:1em;
+    overflow-x: auto;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
+
+.addMusic{
+border-radius:50%;
+background-color: green;
+color:white;
+padding:.5em;
+position:fixed;
+right:0;
+bottom:0;
+margin:.3rem;
+}
+.music_player {
+    max-width: 400px;
+    width: 100vh;
+    font-size: var(--fontsize);
+    background: var(--background);
+    color: white;
+    box-shadow: 5px 5px 2px rgba(10, 100, 100, 0.5);
+    display: grid;
+    gap: 0.5em;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: repeat(1fr, 4);
+    margin:2px;
+    height:90vh;
+}
+
+.music_player .img {
+    max-width: 300px;
+    max-height: 100%;
+    margin:auto;
+    overflow:hidden;
+    grid-column-start: 1;
+    grid-column-end: -1;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: 0.5em;
+
+}
+
+.music_player .img img {
+    object-fit: contain;
+    width: 100%;
+
+}
+
+.music_player .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
+    gap: 0.5em;
+    grid-column-start: 1;
+    grid-column-end: -1;
+    grid-row-start: 2;
+    grid-row-end: 5;
+}
+
+.music_player .title {
+    font-weight: bold;
+    max-width: 50%;
+    overflow: hidden;
+    /*   animation: moveleft 3s 1s ease-in-out infinite; */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.music_player .title>span {
+    white-space: nowrap;
+
+}
+
+.controls ul {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .5em;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.controls ul li:first-child {
+    flex-basis: 100%;
+    text-align: center;
+}
+
+ul a {
+    display: block;
+    border-radius: 5px;
+    padding: .5em;
+}
+
+[data-state="closed"] > * {
+    display: none;
+}
+
+[data-state="open"]  > *  {
+}
+
+/* 
+[data-value = "Play"] .fa-pause{
+display:none;
+}
+[data-value = "Pause"] .fa-play{
+display:none;
+} */
+@keyframes moveleft {
+
+    0%,
+    100% {
+        transform: none;
+    }
+
+    100% {
+        transform: translateX(-100px);
+
+    }
+
+}
+
+
+@media screen  and (min-width:550px){
+
+    .music_player {
+        max-width:400px;
+    }
+}

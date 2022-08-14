@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+</head>
+<style>
+    :root {
+        --fontsize: 15px;
+        --background: #324459;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        height: 100vh;
+
+    }
+
+    *,
+    *::after,
+    *::before {
+        box-sizing: inherit;
+    }
+
+    .music_player {
+        max-width: 300px;
+        font-size: var(--fontsize);
+        background: var(--background);
+        color: white;
+        box-shadow: 5px 5px 2px rgba(10, 100, 100, 0.5);
+        display: grid;
+        gap: 0.5em;
+        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-rows: repeat(1fr, 4);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .music_player .img {
+        max-width: 300px;
+        max-height: 150px;
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        padding: 0.5em;
+
+    }
+
+    .music_player .img img {
+        object-fit: contain;
+        width: 100%;
+
+    }
+
+    .music_player .info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column nowrap;
+        gap: 0.5em;
+        grid-column-start: 1;
+        grid-column-end: -1;
+        grid-row-start: 2;
+        grid-row-end: 5;
+    }
+
+    .music_player .title {
+        font-weight: bold;
+        max-width: 50%;
+        overflow: hidden;
+        /*   animation: moveleft 3s 1s ease-in-out infinite; */
+        text-overflow: ellipsis;
+
+    }
+
+    .music_player .title>span {
+        white-space: nowrap;
+
+    }
+
+    .controls ul {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+        gap: .5em;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .controls ul li:first-child {
+        flex-basis: 100%;
+        text-align: center;
+    }
+
+    ul a {
+        display: block;
+        border-radius: 5px;
+        padding: .5em;
+    }
+
+    [data-state="hidden"] {
+        visibility: hidden;
+    }
+
+    [data-state="visible"] {
+        visibility: visible;
+    }
+
+    @keyframes moveleft {
+
+        0%,
+        100% {
+            transform: none;
+        }
+
+        100% {
+            transform: translateX(-100px);
+
+        }
+
+    }
+</style>
+
+<body>
+    <section class="music_player">
+
+        <section class="img">
+            <img src="https://media.istockphoto.com/vectors/music-note-icon-vector-illustration-vector-id1175435360?k=20&m=1175435360&s=612x612&w=0&h=1yoTgUwobvdFlNxUQtB7_NnWOUD83XOMZHvxUzkOJJs="
+                alt="">
+        </section>
+        <section class="info">
+            <section class="title">
+                <span> Electronics Over here </span>
+            </section>
+            <section class="description"> <span>Dummy Movie Name</span></section>
+            <section class="player">
+                <audio src="./Musics/Electronic Background for Studying.mp3" id="audioPlayer"></audio>
+                <section class="controls">
+                    <ul>
+                        <li>
+                            <span id="currentTime"></span>
+                            <progress id="progress" value="0" max="100"> 32% </progress>
+                            <span id="Duration"></span>
+                        </li>
+                        <li><a data-value="Previous"> Previous</a></li>
+                        <li><a data-value="Play"> Play</a></li>
+                        <li><a data-value="Next"> Next</a></li>
+                        <li><a data-value="volume"> &#8752;
+                                <input type="range" min="0" max="100" step="1" value="50" id="volume"
+                                    data-state="hidden">
+                            </a>
+
+                        </li>
+                    </ul>
+                </section>
+            </section>
+        </section>
+
+    </section>
+
+
+    <script>
+
+        music = {
+            volume: { nextVisibility: 'visible' }
+        }
+
+        document.addEventListener('DOMContentLoaded', setupListeners);
+        function setupListeners() {
+            document.querySelector('.controls').addEventListener('click', setupControls);
+            audioPlayer.onloadedmetadata = function (event) {
+                Duration.innerText = Number(this.duration / 60 / 60).toFixed(2);
+                currentTime.innerText = Number(0).toFixed(2);
+            }
+            audioPlayer.addEventListener('durationchange', function () {
+                console.log("durationchange: " + audioPlayer.duration);
+            }, false);
+        }
+        function setupControls(event) {
+            if (event.target.tagName != 'A') return;
+            switch (event.target.dataset.value) {
+                case "volume":
+                    // Find Previous track and play
+                    let volumeControl = event.target.querySelector('input');
+
+                    if (music.volume.nextVisibility == 'visible') { volumeControl.addEventListener('change', changeVolume) }
+                    else {
+                        volumeControl.removeEventListener('change', changeVolume)
+                    }
+
+                    let curState = volumeControl.dataset.state;
+                    volumeControl.dataset.state = music.volume.nextVisibility;
+                    music.volume.nextVisibility = curState;
+
+
+
+
+                    break;
+                case "Previous":
+                    // Find Previous track and play
+                    break;
+                case "Next":
+                    // Find Next track and play
+                    break;
+                case "Play":
+                    // Resume track and play
+                    showProgress(event.target.dataset.value);
+                    document.querySelector('audio').play();
+                    event.target.dataset.value = 'Pause';
+                    event.target.textContent = 'Pause';
+
+                    break;
+                case "Pause":
+                    // Pause track
+                    showProgress(event.target.dataset.value);
+                    document.querySelector('audio').pause();
+                    event.target.dataset.value = 'Play';
+                    event.target.textContent = 'Play';
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        function changeVolume(event) {
+            event.target.closest('.player').querySelector('audio').volume = event.target.value / 100;
+        }
+
+        function showProgress(state) {
+            let progressTrackInterval;
+            if (state == 'Play') {
+                progressTrackInterval = setInterval(() => {
+                    //progress.value = Math.floor(document.querySelector('audio').currentTime /  document.querySelector('audio').duration);    
+                    currentTime.innerText = Number(document.querySelector('audio').currentTime / 60).toFixed(2);
+                }, 1000);
+
+            }
+            if (state == "Pause") {
+                window.clearInterval(progressTrackInterval)
+            }
+        }
+    </script>
+</body>
+
+</html>
