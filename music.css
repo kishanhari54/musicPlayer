@@ -33,6 +33,7 @@ right:0;
 bottom:0;
 margin:.3rem;
     font-size:2em;
+    cursor:pointer;
 }
 .music_player {
     max-width: 400px;
