@@ -150,6 +150,7 @@ display:none;
 
     .music_player {
         max-width:400px;
+        min-height: 100vh;
     }
     .addMusic{
 font-size: 3em;
