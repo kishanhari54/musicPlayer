@@ -5,7 +5,7 @@ let createMusicbutton = createElement('button','');
 createMusicbutton.classList.add('fa-solid');
 createMusicbutton.classList.add('fa-music');
 createMusicbutton.classList.add('addMusic');
-const url = "./music.css";
+const url = "/music.css";
 
 import ('https://kit.fontawesome.com/5729b6e56d.js');
 document.head.innerHTML += `<link type="text/css" rel="stylesheet" href=${url}>`;
